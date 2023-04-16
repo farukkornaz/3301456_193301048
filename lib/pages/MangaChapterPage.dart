@@ -8,10 +8,22 @@ class MangaChapterPage extends StatelessWidget {
   final Chapter chapter;
   final Manga manga;
 
-  const MangaChapterPage({Key? key, required this.chapter, required this.manga}) : super(key: key);
+  const MangaChapterPage({Key? key, required this.chapter, required this.manga})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    // burada önceki ve sonraki bölümü bulamazsa orElse fonksiyonu boş bir
+    // bölüm döner. bu boş bölümümn fieldlarını kontrol ederek sayfa düzenlenir.
+    Chapter? previousChapter = manga.chapters.firstWhere(
+        (element) => element.chapterNo == chapter.chapterNo - 1,
+        orElse: () => createTempChapter());
+
+    Chapter? nextChapter = manga.chapters.firstWhere(
+        (element) => element.chapterNo == chapter.chapterNo + 1,
+        orElse: () => createTempChapter());
+
     return Scaffold(
       appBar: AppBar(
         title: Text(chapter.chapterName),
@@ -24,24 +36,23 @@ class MangaChapterPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios),
-                        onPressed: () {},
-                      ),
-                      const Text("Önceki Bölüm"),
-                    ],
-                  ),
+                  child: previousChapter.chapterNo != -1
+                      ? Row(
+                          children: const [
+                            Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.indigo,
+                            ),
+                            Text("Önceki Bölüm"),
+                          ],
+                        )
+                      : Expanded(child: Row()),
                   onTap: () {
-                    var chapter = manga.chapters.where((element) => element.chapterNo==chapter.chapterNo+1);
-
-
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            MangaChapterPage(chapter: chapter, manga: manga,),
+                        builder: (context) => MangaChapterPage(
+                            chapter: previousChapter, manga: manga),
                       ),
                     );
                   },
@@ -49,16 +60,25 @@ class MangaChapterPage extends StatelessWidget {
                 const Expanded(
                   child: SizedBox(),
                 ),
-                Row(
-                  children: [
-                    const Text("sonraki bölüm"),
-                    IconButton(
-                      onPressed: () {
-                        // sonraki bölüme gitmek için gerekli kodlar
-                      },
-                      icon: const Icon(Icons.arrow_forward_ios),
-                    ),
-                  ],
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MangaChapterPage(
+                            chapter: nextChapter, manga: manga),
+                      ),
+                    );
+                  },
+                  child: nextChapter.chapterNo != -1 ? Row(
+                    children: const [
+                      Text("sonraki bölüm"),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.indigo,
+                      ),
+                    ],
+                  ) : Expanded(child: Row()),
                 ),
               ],
             ),
@@ -85,5 +105,10 @@ class MangaChapterPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  createTempChapter() {
+    return Chapter(
+        isTemp: true,chapterName: "", chapterNo: -1, parentMangaId: -1, image: [""]);
   }
 }

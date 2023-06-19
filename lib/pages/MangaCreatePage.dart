@@ -95,7 +95,7 @@ class _MangaCreationPageState extends State<MangaCreationPage> {
                       value: selectedGenres.contains(genre),
                       onChanged: (selected) {
                         setState(() {
-                          if (selected != null) {
+                          if (selected == true) {
                             selectedGenres.add(genre);
                           } else {
                             selectedGenres.remove(genre);
@@ -112,8 +112,9 @@ class _MangaCreationPageState extends State<MangaCreationPage> {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
 
-                      // Burada, kaydedilen verileri kullanarak yeni bir Manga nesnesi oluşturabilirsiniz.
+                      // Burada, kaydedilen verileri kullanarak yeni bir Manga nesnesi oluştu.
                       // Örneğin:
+                      print(selectedGenres);
                       Manga newManga = Manga(
                           title: "test",
                           author: "test",
@@ -135,7 +136,8 @@ class _MangaCreationPageState extends State<MangaCreationPage> {
   }
 
   TempChapter() {
-    return Chapter(
-        isTemp: true, chapterName: "", chapterNo: -1, parentMangaId: -1, image: [""]);
+    List<Chapter> chapters = [Chapter(
+        isTemp: true, chapterName: "", chapterNo: -1, parentMangaId: -1, image: [""])];
+    return chapters;
   }
 }

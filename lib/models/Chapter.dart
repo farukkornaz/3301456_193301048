@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 class Chapter {
@@ -17,7 +16,7 @@ class Chapter {
     required this.parentMangaId,
     required this.image,
   }){
-    if(isTemp!=null && isTemp ==true){
+    if(isTemp != null && isTemp == true){
       id=-1;
     }else{
       id = lastId;
@@ -26,27 +25,3 @@ class Chapter {
 
   }
 }
-
-
-
-
-
-
-
-
-
-
-/*
-import 'dart:io';
-
-class Chapter{
-  int id;
-  String? chapterName;
-  File image;
-  late DateTime releaseDate;
-
-  Chapter({required this.id, required this.image, this.chapterName}){
-    releaseDate = DateTime.now();
-  }
-
-}*/

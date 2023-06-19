@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "530879895661",
+    "project_id": "arya-manga",
+    "storage_bucket": "arya-manga.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:530879895661:android:7e37e20da98f351e7fc764",
+        "android_client_info": {
+          "package_name": "com.example.arya_manga"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "530879895661-maacufmt234s2l6ijdq3pc71mctdes9i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2_2XVnDvabwARqhF5gkzitqbHQkDzmC8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "530879895661-maacufmt234s2l6ijdq3pc71mctdes9i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

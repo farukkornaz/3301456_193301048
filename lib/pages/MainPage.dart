@@ -250,7 +250,6 @@ class _HomePageState extends State<HomePage> {
       tags: ['action', 'drama', 'horror'],
       image: 'https://ww5.mangakakalot.tv/mangaimage/manga-oa952283.jpg',
     ),
-
     Manga(
       title: 'Berserk',
       author: 'Kentaro mirua',
@@ -296,7 +295,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
       tags: ['action', 'drama', 'horror'],
-      image: 'https://ww5.mangakakalot.tv/mangaimage/manga-oa952283.jpg',
+      image: 'https://ww5.mangakakalot.tv/mangaimage/manga-ma952557.jpg',
     ),
     Manga(
       title: 'Attack on Titan',
@@ -396,7 +395,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     listMangaByTag.clear();
     if(selectedTag != null){
-
       if(selectedTag == 'all'){
         for(var item in mangas){
           listMangaByTag.add(item);
@@ -421,7 +419,7 @@ class _HomePageState extends State<HomePage> {
             height: MediaQuery.of(context).size.height * 0.33,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 3,
+              itemCount: 4,
               itemBuilder: (context, index) {
                 Manga manga = mangas[index];
                 return Container(

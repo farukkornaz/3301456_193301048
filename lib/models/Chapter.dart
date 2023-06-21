@@ -22,6 +22,20 @@ class Chapter {
       id = lastId;
       lastId += 1;
     }
-
   }
+
+  factory Chapter.fromJson(Map<String, dynamic> json) => Chapter(
+    chapterName: json["chapterName"],
+    chapterNo: json["chapterNo"],
+    parentMangaId: json["parentMangaId"],
+    image: List<String>.from(json["image"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "chapterName": chapterName,
+    "chapterNo": chapterNo,
+    "parentMangaId": parentMangaId,
+    "image": List<dynamic>.from(image.map((x) => x)),
+  };
+
 }

@@ -26,19 +26,42 @@ class FireStore {
     final snapshot = await db.collection('Manga').get();
     List<TestManga> mangas = snapshot.docs.map((e) => TestManga.fromSnapshot(e)).toList();
 
-    //Future nesnesi donuyor stream builder gibi bir yerde kullanabilrisin.
+    //Future nesnesi donuyor stream builder gibi bir yerde kullanabilrisin ya da await fetchManga() diyip
+    // List<Manga> nesnesine atayabilirsin.
     return mangas;
   }
 
-  /*static Future<List<TestManga>> fetchMangaByTag({required List<String> tags}) async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
+  static Future<List<TestManga>?> fetchMangaByTag({required List<String> tags}) async {
+
+    final List<TestManga> mangas = await fetchManga();
+    List<TestManga>? selectedMangas = <TestManga>[];
+
+    bool flag=false;
+
+    for(int i=0; i<mangas.length; i++){
+      for(int j=0; j<mangas[i].tags.length; j++){
+        for(int k=0; k<tags.length; k++) {
+          if (mangas[i].tags[j] == tags[k]) {
+            flag = true;
+            break;
+          }
+        }
+        if(flag){
+          flag = false;
+          selectedMangas.add(mangas[i]);
+          break;
+        }
+      }
+    }
+
+    /*FirebaseFirestore db = FirebaseFirestore.instance;
     //TODO: en son burada kaldın etiketlere göre mangalar getirilcek
     final snapshot = await db.collection('Manga').get();
-    List<TestManga> mangas = snapshot.docs.map((e) => TestManga.fromSnapshot(e)).toList();
+    List<TestManga> mangas = snapshot.docs.map((e) => TestManga.fromSnapshot(e)).toList();*/
 
     //Future nesnesi donuyor stream builder gibi bir yerde kullanabilrisin.
-    return mangas;
-  }*/
+    return selectedMangas;
+  }
 
 
 

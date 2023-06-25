@@ -30,6 +30,14 @@ Future<void> main() async {
       tags: ["tag1", "tag2"],
       image: "image");
 
+  TestManga testManga2 = TestManga(
+      title: "testMangaNeme2",
+      author: "Testauthor2",
+      description: "description2",
+      chapters: [testChapter1, testChapter2],
+      tags: ["tag3", "tag2"],
+      image: "image");
+
 
 
 
@@ -41,8 +49,17 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   //FireStore.addManga(manga: testManga);
+  //FireStore.addManga(manga: testManga2);
 
-  Future<List<TestManga>> allManga = FireStore.fetchManga();
+  //List<TestManga> allManga = await FireStore.fetchManga();
+  List<TestManga>? selectedMangas = await FireStore.fetchMangaByTag(tags: ["tag2"]);
+
+  if(selectedMangas != null){
+    for(int i=0; i<selectedMangas!.length; i++){
+      print(selectedMangas[i]!.title);
+    }
+  }
+
 
   runApp(const AryaManga());
 }

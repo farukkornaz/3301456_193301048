@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'models/Manga.dart';
-import 'models/TestManga.dart';
 
 class FireStore {
 
   static void addManga({
-    required TestManga manga
+    required Manga manga
   }) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     try {
       final docRef = db.collection('Manga').doc();
-      manga.id = docRef.id;
       docRef.set(manga.toJson());
     } catch (e) {
       print("FireAuth addManga kısmında hata meydana geldi.");
@@ -19,22 +17,22 @@ class FireStore {
     }
   }
 
-  static Future<List<TestManga>> fetchManga() async {
+  static Future<List<Manga>> fetchManga() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
 
     //bütün mangaları getirir.
     final snapshot = await db.collection('Manga').get();
-    List<TestManga> mangas = snapshot.docs.map((e) => TestManga.fromSnapshot(e)).toList();
+    List<Manga> mangas = snapshot.docs.map((e) => Manga.fromSnapshot(e)).toList();
 
     //Future nesnesi donuyor stream builder gibi bir yerde kullanabilrisin ya da await fetchManga() diyip
     // List<Manga> nesnesine atayabilirsin.
     return mangas;
   }
 
-  static Future<List<TestManga>?> fetchMangaByTag({required List<String> tags}) async {
+  static Future<List<Manga>?> fetchMangaByTag({required List<String> tags}) async {
 
-    final List<TestManga> mangas = await fetchManga();
-    List<TestManga>? selectedMangas = <TestManga>[];
+    final List<Manga> mangas = await fetchManga();
+    List<Manga>? selectedMangas = <Manga>[];
 
     bool flag=false;
 

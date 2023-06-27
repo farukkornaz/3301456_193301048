@@ -1,3 +1,4 @@
+import 'package:arya_manga/FireStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -128,18 +129,20 @@ class _MangaCreationPageState extends State<MangaCreationPage> {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
 
-                      // Burada, kaydedilen verileri kullanarak yeni bir Manga nesnesi oluştu.
-                      // Örneğin:
-                      print(selectedGenres);
+                      // Burada, kaydedilen verileri kullanarak yeni bir Manga
+                      // nesnesi oluştur. sonra firestore kaydet.
+
+                      //print(selectedGenres);
+
                       Manga newManga = Manga(
-                          title: "test",
-                          author: "test",
-                          description: "test",
-                          chapters: TempChapter(),
+                          title: mangaName,
+                          author: mangaAuthor,
+                          description: mangaDescription,
+                          chapters: null,
                           tags: selectedGenres,
                           image: mangaImage);
 
-                      // Yeni Manga nesnesini kullanarak başka işlemler yapabilirsiniz.
+                      FireStore.addManga(manga: newManga);
                     }
                   },
                 ),

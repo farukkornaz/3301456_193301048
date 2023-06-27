@@ -17,6 +17,7 @@ class _MangaCreationPageState extends State<MangaCreationPage> {
   late String mangaName;
   late String mangaAuthor;
   late String mangaDescription;
+  late String mangaImage;
 
   List<String> mangaGenres = [
   'all',
@@ -86,6 +87,21 @@ class _MangaCreationPageState extends State<MangaCreationPage> {
                   },
                 ),
                 const SizedBox(height: 16),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Manga Kapağı',
+                  ),
+                  validator: (value) {
+                    if (value == null) {
+                      return 'boş bırakılamaz';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    mangaImage = value!;
+                  },
+                ),
+                const SizedBox(height: 16),
                 const Text('Genres', style: TextStyle(fontSize: 16)),
                 const SizedBox(height: 8),
                 Column(
@@ -121,7 +137,7 @@ class _MangaCreationPageState extends State<MangaCreationPage> {
                           description: "test",
                           chapters: TempChapter(),
                           tags: selectedGenres,
-                          image: "test");
+                          image: mangaImage);
 
                       // Yeni Manga nesnesini kullanarak başka işlemler yapabilirsiniz.
                     }

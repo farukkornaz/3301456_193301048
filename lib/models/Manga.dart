@@ -13,7 +13,7 @@ class Manga {
   String title;
   String author;
   String description;
-  List<Chapter> chapters;
+  List<Chapter>? chapters;
   List<String> tags;
   String image;
   static int lastId=0;
@@ -54,7 +54,7 @@ class Manga {
     "author": author,
     "image": image,
     "description": description,
-    "chapters": List<dynamic>.from(chapters.map((x) => x.toJson())),
+    "chapters": chapters != null ? List<dynamic>.from(chapters!.map((x) => x.toJson())) : null,
     "tags": List<dynamic>.from(tags.map((x) => x)),
   };
 

@@ -16,13 +16,13 @@ class MangaChapterPage extends StatelessWidget {
 
     // burada önceki ve sonraki bölümü bulamazsa orElse fonksiyonu boş bir
     // bölüm döner. bu boş bölümümn fieldlarını kontrol ederek sayfa düzenlenir.
-    Chapter? previousChapter = manga.chapters.firstWhere(
+    Chapter? previousChapter = manga.chapters!=null ? manga.chapters!.firstWhere(
         (element) => element.chapterNo == chapter.chapterNo - 1,
-        orElse: () => createTempChapter());
+        orElse: () => createTempChapter()): null;
 
-    Chapter? nextChapter = manga.chapters.firstWhere(
+    Chapter? nextChapter = manga.chapters!=null ? manga.chapters!.firstWhere(
         (element) => element.chapterNo == chapter.chapterNo + 1,
-        orElse: () => createTempChapter());
+        orElse: () => createTempChapter()): null;
 
     return Scaffold(
       appBar: AppBar(
@@ -35,6 +35,7 @@ class MangaChapterPage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                previousChapter != null ?
                 GestureDetector(
                   child: previousChapter.chapterNo != -1
                       ? Row(
@@ -46,7 +47,7 @@ class MangaChapterPage extends StatelessWidget {
                             Text("Önceki Bölüm"),
                           ],
                         )
-                      : Expanded(child: Row()),
+                      : Row(),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -56,10 +57,11 @@ class MangaChapterPage extends StatelessWidget {
                       ),
                     );
                   },
-                ),
+                ): const SizedBox(),
                 const Expanded(
                   child: SizedBox(),
                 ),
+                nextChapter!=null ?
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -78,8 +80,8 @@ class MangaChapterPage extends StatelessWidget {
                         color: Colors.indigo,
                       ),
                     ],
-                  ) : Expanded(child: Row()),
-                ),
+                  ) : Row(),
+                ) : const SizedBox(),
               ],
             ),
           ),

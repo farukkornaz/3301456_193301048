@@ -72,9 +72,9 @@ class MangaDetailPage extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: manga.chapters.length,
+              itemCount: manga.chapters != null ? manga.chapters!.length : 0,
               itemBuilder: (BuildContext context, int index) {
-                Chapter chapter = manga.chapters[index];
+                Chapter chapter = manga.chapters![index];
                 return ListTile(
                   title: Text(chapter.chapterName),
                   subtitle: Text(chapter.chapterNo.toString()),

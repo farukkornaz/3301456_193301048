@@ -50,17 +50,17 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FireStore.addManga(manga: testManga);
+  //FireStore.addManga(manga: testManga);
   //FireStore.addManga(manga: testManga2);
 
   //List<Manga> allManga = await FireStore.fetchManga();
-  List<Manga>? selectedMangas = await FireStore.fetchMangaByTag(tags: ["tag2"]);
+  /*List<Manga>? selectedMangas = await FireStore.fetchMangaByTag(tags: ["tag2"]);
 
   if(selectedMangas != null){
     for(int i=0; i<selectedMangas.length; i++){
       print(selectedMangas[i].title);
     }
-  }
+  }*/
 
 
   runApp(const AryaManga());

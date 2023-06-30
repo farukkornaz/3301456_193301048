@@ -34,7 +34,7 @@ class Manga {
         title: data["title"],
         author: data["author"],
         description: data["description"],
-        chapters: List<Chapter>.from(data["chapters"].map((x) => Chapter.fromJson(x))),
+        chapters: data["chapters"] != null ? List<Chapter>.from(data["chapters"].map((x) => Chapter.fromJson(x))) : [],
         tags: List<String>.from(data["tags"].map((x) => x)),
         image: data["image"]);
   }
@@ -45,7 +45,7 @@ class Manga {
     author: json["author"],
     image: json["image"],
     description: json["description"],
-    chapters: List<Chapter>.from(json["chapters"].map((x) => Chapter.fromJson(x))),
+    chapters: json["chapters"] != null ? List<Chapter>.from(json["chapters"].map((x) => Chapter.fromJson(x))) : [],
     tags: List<String>.from(json["tags"].map((x) => x)),
   );
 
@@ -59,9 +59,6 @@ class Manga {
   };
 
 }
-
-
-
 
 /*import 'dart:convert';
 import 'dart:io';

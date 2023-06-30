@@ -23,6 +23,7 @@ class FireStore {
     //bütün mangaları getirir.
     final snapshot = await db.collection('Manga').get();
     List<Manga> mangas = snapshot.docs.map((e) => Manga.fromSnapshot(e)).toList();
+    print("1");
 
     //Future nesnesi donuyor stream builder gibi bir yerde kullanabilrisin ya da await fetchManga() diyip
     // List<Manga> nesnesine atayabilirsin.

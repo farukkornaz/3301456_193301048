@@ -14,7 +14,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Future<List<Manga>> mangas;
-  late List<Manga> MangaList;
 
   /*List<Manga> test = [
     Manga(
@@ -395,14 +394,6 @@ class _HomePageState extends State<HomePage> {
   List<Manga> listMangaByTag = [];
   String? selectedTag;
 
-
-  Future fetchManga() async {
-    await FireStore.fetchManga().then((value) => value.forEach((element) {
-          print(element.title);
-          MangaList.add(element);
-        }));
-  }
-
   @override
   void initState() {
     super.initState();
@@ -410,9 +401,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> setTag() async {
-
     listMangaByTag.clear();
-
     List<Manga> mangaList = await mangas;
     if (selectedTag != null) {
       if (selectedTag == 'all') {
@@ -430,9 +419,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

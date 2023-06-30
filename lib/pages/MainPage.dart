@@ -1,3 +1,4 @@
+import 'package:arya_manga/FireStore.dart';
 import 'package:arya_manga/pages/MangaCreatePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Future<List<Manga>> mangas;
+  late List<Manga> MangaList;
 
-  List<Manga> mangas = [
+  /*List<Manga> test = [
     Manga(
       title: 'Naruto',
       author: 'Masashi Kishimoto',
@@ -377,7 +380,8 @@ class _HomePageState extends State<HomePage> {
       tags: ['action', 'drama', 'horror'],
       image: 'https://ww5.mangakakalot.tv/mangaimage/manga-oa952283.jpg',
     ),
-  ];
+  ];*/
+
   List<String> tags = [
     'all',
     'action',
@@ -388,74 +392,109 @@ class _HomePageState extends State<HomePage> {
     'shounen'
   ];
 
+  List<Manga> listMangaByTag = [];
   String? selectedTag;
-  List<Manga> listMangaByTag=[];
+
+
+  Future fetchManga() async {
+    await FireStore.fetchManga().then((value) => value.forEach((element) {
+          print(element.title);
+          MangaList.add(element);
+        }));
+  }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    mangas = FireStore.fetchManga();
+  }
+
+  Future<void> setTag() async {
+
     listMangaByTag.clear();
-    if(selectedTag != null){
-      if(selectedTag == 'all'){
-        for(var item in mangas){
+
+    List<Manga> mangaList = await mangas;
+    if (selectedTag != null) {
+      if (selectedTag == 'all') {
+        for (var item in mangaList) {
           listMangaByTag.add(item);
         }
       }
-
-      for(var item in mangas){
-        if(item.tags.contains(selectedTag)){
+      for (var item in mangaList) {
+        if (item.tags.contains(selectedTag)) {
           listMangaByTag.add(item);
         }
       }
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('Arya Manga',style: TextStyle(color: Colors.green),),
+        title: const Text(
+          'Arya Manga',
+          style: TextStyle(color: Colors.green),
+        ),
         centerTitle: true,
       ),
       body: Column(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.33,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                Manga manga = mangas[index];
-                return Container(
-                  margin: const EdgeInsets.all(8),
-                  child: GestureDetector(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MangaDetailPage(manga: manga),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Image.network(
-                            manga.image,
-                            fit: BoxFit.cover,
+              height: MediaQuery.of(context).size.height * 0.33,
+              child: FutureBuilder(
+                future: mangas,
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 4,
+                      itemBuilder: (context, index) {
+                        Manga manga = snapshot.data[index];
+                        return Container(
+                          margin: const EdgeInsets.all(8),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      MangaDetailPage(manga: manga),
+                                ),
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Image.network(
+                                    manga.image,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  manga.title,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(manga.author),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          manga.title,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(manga.author),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              )),
           const SizedBox(height: 16),
           Container(
             height: 50,
@@ -469,14 +508,13 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       setState(() {
                         selectedTag = tags[index];
+                        setTag();
                       });
                     },
-                    child: Text(tags[index]),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
-
-
                     ),
+                    child: Text(tags[index]),
                   ),
                 );
               },
@@ -484,30 +522,43 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 16),
           Expanded(
-            child: ListView.builder(
-              itemCount: selectedTag!=null ? listMangaByTag.length : mangas.length,
-              itemBuilder: (context, index) {
-                Manga manga =selectedTag!=null ? listMangaByTag[index] : mangas[index];
-                //Manga manga = mangas[index];
-                return ListTile(
-                  leading: Image.network(
-                    manga.image,
-                    width: 50,
-                  ),
-                  title: Text(manga.title),
-                  subtitle: Text(manga.description),
-                  onTap: () {
-                    // detay sayfasına git
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MangaDetailPage(manga: manga),
-                      ),
+            child: FutureBuilder(
+                future: mangas,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    return ListView.builder(
+                      itemCount: selectedTag != null
+                          ? listMangaByTag.length
+                          : snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        Manga manga = selectedTag != null
+                            ? listMangaByTag[index]
+                            : snapshot.data![index];
+                        //Manga manga = mangas[index];
+                        return ListTile(
+                          leading: Image.network(
+                            manga.image,
+                            width: 50,
+                          ),
+                          title: Text(manga.title),
+                          subtitle: Text(manga.description),
+                          onTap: () {
+                            // detay sayfasına git
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    MangaDetailPage(manga: manga),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     );
-                  },
-                );
-              },
-            ),
+                  }
+                }),
           ),
         ],
       ),
@@ -519,7 +570,6 @@ class _HomePageState extends State<HomePage> {
               builder: (context) => MangaCreationPage(),
             ),
           );
-
         },
         child: const Icon(Icons.add),
       ),

@@ -14,14 +14,39 @@ class MangaDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.orange,
+        shadowColor: Colors.white,
+        actions: [
+          IconButton(icon: const Icon(Icons.add), onPressed: () {}),
+        ],
         centerTitle: true,
         title: Text(manga.title),
       ),
       body: Column(
         children: [
-          // manga detayları için widgetlar
-          // ...
-
+          const SizedBox(
+            height: 20,
+          ),
+          const Text(
+            'Manga Açıklaması',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Column(
+            children: [
+              Text(
+                manga.description,
+                style: const TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           Row(
             children: [
               const Text(
@@ -34,28 +59,7 @@ class MangaDetailPage extends StatelessWidget {
               Text(
                 manga.author,
                 style: const TextStyle(
-                  fontSize: 15,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-
-          const Text(
-            'Manga Açıklaması: ',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Column(
-            children: [
-              Text(
-                manga.description,
-                style: const TextStyle(
-                  fontSize: 15,
+                  fontSize: 18,
                 ),
               ),
             ],
@@ -76,8 +80,8 @@ class MangaDetailPage extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 Chapter chapter = manga.chapters![index];
                 return ListTile(
-                  title: Text(chapter.chapterName),
-                  subtitle: Text(chapter.chapterNo.toString()),
+                  title: Text(chapter.chapterNo.toString()),
+                  subtitle: Text(chapter.chapterName),
                   leading: Image.network(chapter.image[0]),
                   onTap: () {
                     // bölüm sayfasına git

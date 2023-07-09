@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../models/Chapter.dart';
 import '../models/Manga.dart';
+import 'ChapterCreationPage.dart';
 
 class MangaDetailPage extends StatelessWidget {
   final Manga manga;
@@ -17,7 +18,12 @@ class MangaDetailPage extends StatelessWidget {
         backgroundColor: Colors.orange,
         shadowColor: Colors.white,
         actions: [
-          IconButton(icon: const Icon(Icons.add), onPressed: () {}),
+          IconButton(icon: const Icon(Icons.add), onPressed: () {Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChapterCreationPage(manga),
+            ),
+          );}),
         ],
         centerTitle: true,
         title: Text(manga.title),

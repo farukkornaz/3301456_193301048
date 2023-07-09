@@ -10,6 +10,8 @@ class FireStore {
     FirebaseFirestore db = FirebaseFirestore.instance;
     try {
       final docRef = db.collection('Manga').doc();
+      manga.id = docRef.id;
+      print(docRef.id);
       docRef.set(manga.toJson());
     } catch (e) {
       print("FireAuth addManga kısmında hata meydana geldi.");
@@ -23,7 +25,6 @@ class FireStore {
     //bütün mangaları getirir.
     final snapshot = await db.collection('Manga').get();
     List<Manga> mangas = snapshot.docs.map((e) => Manga.fromSnapshot(e)).toList();
-    print("1");
 
     //Future nesnesi donuyor stream builder gibi bir yerde kullanabilrisin ya da await fetchManga() diyip
     // List<Manga> nesnesine atayabilirsin.

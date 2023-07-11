@@ -153,10 +153,4 @@ class _MangaCreationPageState extends State<MangaCreationPage> {
       ),
     );
   }
-
-  TempChapter() {
-    List<Chapter> chapters = [Chapter(
-        isTemp: true, chapterName: "", chapterNo: -1, parentMangaId: -1, image: [""])];
-    return chapters;
-  }
 }

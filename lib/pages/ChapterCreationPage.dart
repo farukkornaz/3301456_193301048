@@ -14,154 +14,151 @@ class ChapterCreationPage extends StatefulWidget {
 }
 
 class _ChapterCreationPageState extends State<ChapterCreationPage> {
-
+  List<String> listOfChapterImages = [];
 
   final _formKey = GlobalKey<FormState>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  late String mangaName;
-  late String mangaAuthor;
-  late String mangaDescription;
-  late String mangaImage;
+  final myController = TextEditingController();
 
-  List<String> mangaGenres = [
-    'all',
-    'action',
-    'adventure',
-    'drama',
-    'fantasy',
-    'horror',
-    'shounen'
-  ];
-  List<String> selectedGenres = [];
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    myController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Start listening to changes.
+    myController.addListener(_printLatestValue);
+  }
+
+  void _printLatestValue() {
+    print('Second text field: ${myController.text}');
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.manga.title);
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Manga Oluştur'),
+        title: const Text('Bölüm Ekle'),
       ),
-      body: ListView(
+      body: Column(
         children: [
           Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Manga İsmi',
-                  ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Manga ismini giriniz';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    mangaName = value!;
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Yazar İsmi',
-                  ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Yazar ismini giriniz';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    mangaAuthor = value!;
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Manga Açıklaması',
-                  ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'lütfen manga açıklamasını giriniz';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    mangaDescription = value!;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Manga Kapağı',
-                  ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'boş bırakılamaz';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    mangaImage = value!;
-                  },
-                ),
-                const SizedBox(height: 16),
-                const Text('Genres', style: TextStyle(fontSize: 16)),
-                const SizedBox(height: 8),
-                Column(
-                  children: mangaGenres.map((genre) {
-                    return CheckboxListTile(
-                      title: Text(genre),
-                      value: selectedGenres.contains(genre),
-                      onChanged: (selected) {
-                        setState(() {
-                          if (selected == true) {
-                            selectedGenres.add(genre);
-                          } else {
-                            selectedGenres.remove(genre);
-                          }
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  child: const Text('Kaydet'),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Burasi Bos Birakilamaz!';
+                      }
+                      return null;
+                    },
+                    controller: myController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'test',
+                    ),
 
-                      // Burada, kaydedilen verileri kullanarak yeni bir Manga
-                      // nesnesi oluştur. sonra firestore kaydet.
-
-                      //print(selectedGenres);
-
-                      Manga newManga = Manga(
-                          title: mangaName,
-                          author: mangaAuthor,
-                          description: mangaDescription,
-                          chapters: null,
-                          tags: selectedGenres,
-                          image: mangaImage);
-
-                      FireStore.addManga(manga: newManga);
-                    }
-                  },
-                ),
-              ],
+                  ),
+                ],
+              )),
+          Expanded(
+            child: ListView.builder(
+              itemCount: listOfChapterImages.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.deepOrange,
+                    ),
+                    child: Text(
+                      '${index + 1}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  title: Text(listOfChapterImages[index]),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      setState(() {
+                        listOfChapterImages.removeAt(index);
+                      });
+                    },
+                  ),
+                );
+              },
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                _showAddTextFieldDialog(context);
+              },
+              child: const Text('bölüm baglantisi Ekle'),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // Validate returns true if the form is valid, or false otherwise.
+              if (_formKey.currentState!.validate()) {
+                // If the form is valid, display a snackbar. In the real world,
+                // you'd often call a server or save the information in a database.
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('veri isleniyor...')),
+                );
+              }
+            },
+            child: const Text('Bölümü Kaydet'),
           ),
         ],
       ),
     );
   }
 
-  TempChapter() {
-    List<Chapter> chapters = [Chapter(
-        isTemp: true, chapterName: "", chapterNo: -1, parentMangaId: -1, image: [""])];
-    return chapters;
+  void _showAddTextFieldDialog(BuildContext context) {
+    String textFieldValue = '';
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('bölüm baglantisi ekle'),
+          content: TextField(
+            onChanged: (value) {
+              textFieldValue = value;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  listOfChapterImages.add(textFieldValue);
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Tamam'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('İptal'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -11,7 +11,6 @@ class FireStore {
     try {
       final docRef = db.collection('Manga').doc();
       manga.id = docRef.id;
-      print(docRef.id);
       docRef.set(manga.toJson());
     } catch (e) {
       print("FireAuth addManga kısmında hata meydana geldi.");

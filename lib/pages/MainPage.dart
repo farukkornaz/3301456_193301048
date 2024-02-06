@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Future<List<Manga>> mangas;
 
-  /*List<Manga> test = [
+  List<Manga> test = [
     Manga(
       title: 'Naruto',
       author: 'Masashi Kishimoto',
@@ -379,7 +379,7 @@ class _HomePageState extends State<HomePage> {
       tags: ['action', 'drama', 'horror'],
       image: 'https://ww5.mangakakalot.tv/mangaimage/manga-oa952283.jpg',
     ),
-  ];*/
+  ];
 
   List<String> tags = [
     'all',
